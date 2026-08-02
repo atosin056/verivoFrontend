@@ -46,6 +46,10 @@
     0 1px 0 0 #14110f0a, 0 2px 6px -2px #14110f14, 0 12px 32px -12px #14110f1f;
   --shadow-stamp: 0 1px 0 0 #14110f0f, 0 18px 48px -20px #0f3d2e2e;
 }
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  display: none;
+}
 body {
   font-family: "Fraunces", sans-serif;
   padding: 0 !important;
@@ -443,5 +447,162 @@ body {
 
 a {
   text-decoration: none;
-  color: auto;
+  color: inherit;
+}
+.already-with-us {
+  font-family: "Poppins";
+  font-weight: 400;
+  font-size: 15px;
+  color: #14110f;
+}
+
+/* ---- Register page: responsive shell ---- */
+/* Base rules below reproduce the exact desktop values that used to be
+   inline styles, so desktop looks 100% unchanged. */
+.register-shell {
+  display: flex;
+}
+
+.register-form-col {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 150vh;
+  height: 100vh;
+  overflow-y: auto;
+  padding-inline: 0;
+  box-sizing: border-box;
+}
+
+.register-form-inner {
+  padding-top: 100px;
+}
+
+.register-bottom-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-field-input::placeholder {
+  color: #a39a8c;
+}
+/* ---- Tablet ---- */
+@media (max-width: 1024px) {
+  .register-form-col {
+    padding-inline: 32px;
+  }
+}
+
+/* ---- Below this width, the dark editorial side panel (LinearContainer)
+   no longer has room to breathe next to the form, so we drop it and let
+   the form take the full width. This mirrors a very common pattern for
+   split auth screens and keeps every element on the form side untouched. ---- */
+@media (max-width: 900px) {
+  .register-shell {
+    flex-direction: column;
+  }
+
+  .Linearcontainer {
+    display: none;
+  }
+
+  .register-form-col {
+    max-width: 100%;
+    height: auto;
+    min-height: 100vh;
+    padding-inline: 24px;
+  }
+
+  .register-form-inner {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-form-col {
+    padding-inline: 16px;
+  }
+
+  .register-bottom-row {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+/* ---- RegChoice cards: stack icon/text/arrow on very narrow screens ---- */
+@media (max-width: 480px) {
+  .regchoice-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .regchoice-arrow {
+    align-self: flex-end;
+    margin-top: 0;
+  }
+
+  .regchoice-title {
+    font-size: 22px;
+  }
+}
+
+/* ---- Entrance animation ---- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-el {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.anim-delay-1 {
+  animation-delay: 0.05s;
+}
+.anim-delay-2 {
+  animation-delay: 0.16s;
+}
+.anim-delay-3 {
+  animation-delay: 0.27s;
+}
+.anim-delay-4 {
+  animation-delay: 0.38s;
+}
+.anim-delay-5 {
+  animation-delay: 0.49s;
+}
+
+/* Stagger the two RegChoice cards individually inside their list */
+.regchoice-card {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.regchoice-list > .regchoice-card:nth-child(1) {
+  animation-delay: 0.3s;
+}
+.regchoice-list > .regchoice-card:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+/* Respect users who've asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+  .anim-el,
+  .regchoice-card {
+    animation: none;
+    opacity: 1;
+  }
 }
