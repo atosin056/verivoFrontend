@@ -34,7 +34,7 @@ export default function FormField({
   const isTel = type === "tel";
 
   return (
-    <div style={{ marginBottom: "2px" }}>
+    <div style={{ marginBottom: "12px" }}>
       <label
         style={{
           display: "block",

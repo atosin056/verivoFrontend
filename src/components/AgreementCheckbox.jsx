@@ -34,13 +34,13 @@ export default function AgreementCheckbox({
   return (
     <label
       style={{
+        position: "relative", // ← add this
         display: "flex",
         alignItems: "flex-start",
         gap: "10px",
         cursor: "pointer",
       }}
     >
-      {/* real checkbox, visually hidden but present for keyboard + screen readers */}
       <input
         type="checkbox"
         checked={isChecked}
@@ -55,7 +55,6 @@ export default function AgreementCheckbox({
           opacity: 0,
         }}
       />
-
       {/* decorative box that reflects the real checkbox's state */}
       <span
         aria-hidden="true"
@@ -87,7 +86,6 @@ export default function AgreementCheckbox({
           </svg>
         )}
       </span>
-
       <span
         style={{
           fontFamily: "'Poppins', sans-serif",

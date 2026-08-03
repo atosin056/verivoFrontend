@@ -8,20 +8,82 @@ import AuthIntro from "../components/AuthIntro";
 import RoleToggle from "../components/RoleToggle";
 import FormField from "../components/FormField";
 import TradeSelect from "../components/TradeSelect";
-import AgreementCheckbox, {
-  AgreementLink,
-} from "../components/AgreementCheckbox";
+import AgreementCheckbox from "../components/AgreementCheckbox";
+import PrimaryActionButton from "../components/PrimaryActionBtn";
+import TrustBadge from "../components/TrustBadge";
+import OtpInput from "../components/Otpinput";
+
 export default function Register() {
   const [hover, setHover] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Seed role from whatever's in the URL the moment this mounts...
   const [role, setRole] = useState(() => searchParams.get("role"));
-  const [agreed, setAgreed] = useState(false);
+
+  // "details" = the name/phone/trade form, "otp" = the code-verification screen
+  const [step, setStep] = useState("details");
+  const [otpError, setOtpError] = useState("");
+  const [verifying, setVerifying] = useState(false);
+
+  // Single source of truth for everything this form collects. Shape this
+  // to match whatever your backend endpoint expects as the payload.
+  const [formData, setFormData] = useState({
+    role: role,
+    name: "",
+    phone: "",
+    trade: "",
+    agreed: false,
+    otp: "",
+  });
 
   useEffect(() => {
     setRole(searchParams.get("role"));
+    setFormData((prev) => ({ ...prev, role: searchParams.get("role") }));
   }, [searchParams]);
+
+  // Generic setter: updateField("name", "Tosin"), updateField("agreed", true), etc.
+  const updateField = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const [continueError, setContinueError] = useState("");
+
+  const handleContinue = () => {
+    if (!formData.name.trim()) {
+      setContinueError("Enter your name.");
+      return;
+    }
+    if (!formData.phone.trim()) {
+      setContinueError("Enter your phone number.");
+      return;
+    }
+    if (!formData.trade) {
+      setContinueError("Pick a trade.");
+      return;
+    }
+    if (!formData.agreed) {
+      setContinueError("Please agree to the Terms and Privacy Notice.");
+      return;
+    }
+
+    setContinueError("");
+    setStep("otp");
+  };
+
+  const handleVerify = () => {
+    if (formData.otp.length < 6) {
+      setOtpError("Enter all 6 digits.");
+      return;
+    }
+    setOtpError("");
+    setVerifying(true);
+
+    // Final payload, once the OTP has actually been fully entered/verified
+    console.log("Final form data:", formData);
+
+    // TODO: replace with the real verify-OTP API call, e.g.
+    // fetch("/api/verify-otp", { method: "POST", body: JSON.stringify(formData) })
+  };
 
   return (
     <>
@@ -74,71 +136,250 @@ export default function Register() {
               </div>
             </Animate>
           </LinearContainer>
-          <div className="register-form-col" style={{ overflowY: "hidden" }}>
+          <div className="register-form-col" style={{ overflowY: "auto" }}>
             <div className="register-form-inner">
               {role ? (
                 <div className="register-form-inner-alt">
-                  <Animate
-                    delay={0.05}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "20px",
-                    }}
-                  >
-                    <AuthIntro
-                      eyebrow="Create your Recivo"
-                      description="First, your phone. Then we open a Paystack Virtual Account in the background while you do the real work — the diagnostic interview."
+                  {step === "details" ? (
+                    <Animate
+                      delay={0.05}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "20px",
+                      }}
                     >
-                      <div>
-                        Let’s set up the
-                        <br />
-                        <span style={{ color: "#0f3d2e", fontStyle: "italic" }}>
-                          paperwork.
-                        </span>
-                      </div>
-                    </AuthIntro>
-                    <RoleToggle
-                      value={role}
-                      onChange={(next) =>
-                        setSearchParams((prev) => {
-                          const params = new URLSearchParams(prev);
-                          params.set("role", next);
-                          return params;
-                        })
-                      }
-                    />
-                    <div>
-                      <FormField
-                        type="text"
-                        label="Your name"
-                        required={true}
-                        placeholder="Oluwatosin Akinfenwa"
-                      />
-                      <FormField
-                        type="tel"
-                        label="Phone number"
-                        required={true}
-                        placeholder="803 000 0000"
-                        countryCode="+234"
-                        countryLabel="NG"
-                        underText="We'll send a one-time code. No password to remember."
-                      />
-                    </div>
-                    <div>
-                      <TradeSelect />
-                    </div>
-                    <div>
-                      <AgreementCheckbox
-                        checked={agreed}
-                        onChange={setAgreed}
-                        color="#0f3d2e"
+                      <AuthIntro
+                        eyebrow="Create your Recivo"
+                        description="First, your phone. Then we open a Paystack Virtual Account in the background while you do the real work — the diagnostic interview."
                       >
-                        I agree to the Recivo Terms and Privacy Notice .
-                        NDPR-compliant; voice recordings deletable on request.
-                      </AgreementCheckbox>
-                    </div>
-                  </Animate>
+                        <div>
+                          Let’s set up the
+                          <br />
+                          <span
+                            style={{ color: "#0f3d2e", fontStyle: "italic" }}
+                          >
+                            paperwork.
+                          </span>
+                        </div>
+                      </AuthIntro>
+                      <RoleToggle
+                        value={role}
+                        onChange={(next) =>
+                          setSearchParams((prev) => {
+                            const params = new URLSearchParams(prev);
+                            params.set("role", next);
+                            return params;
+                          })
+                        }
+                      />
+                      <div>
+                        <FormField
+                          type="text"
+                          label="Your name"
+                          required={true}
+                          placeholder="Oluwatosin Akinfenwa"
+                          value={formData.name}
+                          onChange={(e) => updateField("name", e.target.value)}
+                        />
+                        <FormField
+                          type="tel"
+                          label="Phone number"
+                          required={true}
+                          placeholder="803 000 0000"
+                          countryCode="+234"
+                          countryLabel="NG"
+                          underText="We'll send a one-time code. No password to remember."
+                          value={formData.phone}
+                          onChange={(e) => updateField("phone", e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <TradeSelect
+                          value={formData.trade}
+                          onChange={(key) => updateField("trade", key)}
+                        />
+                      </div>
+                      <div>
+                        <AgreementCheckbox
+                          checked={formData.agreed}
+                          onChange={(val) => updateField("agreed", val)}
+                          color="#0f3d2e"
+                        >
+                          I agree to the Recivo Terms and Privacy Notice .
+                          NDPR-compliant; voice recordings deletable on request.
+                        </AgreementCheckbox>
+                      </div>
+
+                      {continueError && (
+                        <p
+                          style={{
+                            color: "#c0392b",
+                            fontFamily: "Poppins",
+                            fontSize: "13px",
+                            margin: 0,
+                          }}
+                        >
+                          {continueError}
+                        </p>
+                      )}
+
+                      <div>
+                        <PrimaryActionButton onClick={handleContinue}>
+                          Continue — verify your phone
+                        </PrimaryActionButton>
+                      </div>
+                      <div style={{ display: "flex", gap: "20px" }}>
+                        <TrustBadge
+                          icon="./src/assets/shield.png"
+                          label="OTP, never a password"
+                        />
+                        <TrustBadge
+                          icon="./src/assets/mic.png"
+                          label="Voice biometric for re-auth"
+                        />
+                        <TrustBadge
+                          icon="./src/assets/star.png"
+                          label="Paystack VA provisioned for you"
+                        />
+                      </div>
+                      <div>
+                        <h4
+                          className="already-with-us"
+                          style={{ color: "#6f6c63" }}
+                        >
+                          Already on Verivo?
+                          <Link to="/auth/login">
+                            <span
+                              onMouseEnter={() => setHover(true)}
+                              onMouseLeave={() => setHover(false)}
+                              style={{
+                                paddingLeft: "5px",
+                                textDecoration: "underline",
+                                textDecorationColor: "#c89a2a",
+                                color: hover ? "#0f3d2e" : "#14110f",
+                                textDecorationThickness: "2px",
+                                textUnderlineOffset: "4px",
+                                transition: "color 0.3s ease",
+                              }}
+                            >
+                              Sign in
+                            </span>
+                          </Link>
+                        </h4>
+                      </div>
+                    </Animate>
+                  ) : (
+                    <Animate
+                      delay={0.05}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "20px",
+                      }}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setStep("details")}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          background: "none",
+                          border: "none",
+                          padding: 0,
+                          cursor: "pointer",
+                          alignSelf: "flex-start",
+                        }}
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M19 12H5M5 12L11 6M5 12L11 18"
+                            stroke="#2A2A28"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        <h4 className="auth-go-back">Back</h4>
+                      </button>
+
+                      <AuthIntro
+                        eyebrow="Verify your phone"
+                        description="We just sent a 6-digit code by SMS. Enter it below — it expires in 5 minutes."
+                      >
+                        <div>
+                          Enter the
+                          <br />
+                          <span
+                            style={{ color: "#0f3d2e", fontStyle: "italic" }}
+                          >
+                            code.
+                          </span>
+                        </div>
+                      </AuthIntro>
+
+                      <div>
+                        <OtpInput
+                          length={6}
+                          error={!!otpError}
+                          onChange={(code) => updateField("otp", code)}
+                          onComplete={(code) => updateField("otp", code)}
+                        />
+                      </div>
+
+                      {otpError && (
+                        <p
+                          style={{
+                            color: "#c0392b",
+                            fontFamily: "Poppins",
+                            fontSize: "13px",
+                            margin: 0,
+                          }}
+                        >
+                          {otpError}
+                        </p>
+                      )}
+
+                      <div>
+                        <PrimaryActionButton
+                          onClick={handleVerify}
+                          loading={verifying}
+                        >
+                          Verify and continue
+                        </PrimaryActionButton>
+                      </div>
+
+                      <h4
+                        className="already-with-us"
+                        style={{ color: "#6f6c63" }}
+                      >
+                        Didn't get a code?
+                        <span
+                          onClick={() => {
+                            /* TODO: trigger resend-OTP API call */
+                          }}
+                          style={{
+                            paddingLeft: "5px",
+                            textDecoration: "underline",
+                            textDecorationColor: "#c89a2a",
+                            color: "#14110f",
+                            textDecorationThickness: "2px",
+                            textUnderlineOffset: "4px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          Resend
+                        </span>
+                      </h4>
+                    </Animate>
+                  )}
                 </div>
               ) : (
                 <>
