@@ -1,7 +1,8 @@
 import LinearContainer from "../components/LinearContainer";
 import logo from "../assets/logo.png";
+import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import RegChoice from "../components/RegChoice";
 import Animate from "../components/Animate";
 import AuthIntro from "../components/AuthIntro";
@@ -12,10 +13,12 @@ import AgreementCheckbox from "../components/AgreementCheckbox";
 import PrimaryActionButton from "../components/PrimaryActionBtn";
 import TrustBadge from "../components/TrustBadge";
 import OtpInput from "../components/Otpinput";
-
+import OtpToast from "../components/OtpToast";
 export default function Register() {
+  const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [otp_hash, setOtpHash] = useState("");
 
   // Seed role from whatever's in the URL the moment this mounts...
   const [role, setRole] = useState(() => searchParams.get("role"));
@@ -24,6 +27,7 @@ export default function Register() {
   const [step, setStep] = useState("details");
   const [otpError, setOtpError] = useState("");
   const [verifying, setVerifying] = useState(false);
+  const [verified, setVerified] = useState(false);
 
   // Single source of truth for everything this form collects. Shape this
   // to match whatever your backend endpoint expects as the payload.
@@ -47,8 +51,9 @@ export default function Register() {
   };
 
   const [continueError, setContinueError] = useState("");
+  const [sendingOtp, setSendingOtp] = useState(false);
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!formData.name.trim()) {
       setContinueError("Enter your name.");
       return;
@@ -67,7 +72,21 @@ export default function Register() {
     }
 
     setContinueError("");
-    setStep("otp");
+    setSendingOtp(true);
+
+    try {
+      const payload = { phone: formData.phone.trim(), purpose: "signup" };
+      const response = await axios.post(
+        "http://localhost:3000/otp/generate",
+        payload,
+      );
+      setOtpHash(response.data.otp);
+      setStep("otp");
+    } catch (err) {
+      setContinueError(err.message);
+    } finally {
+      setSendingOtp(false);
+    }
   };
 
   const handleVerify = () => {
@@ -78,11 +97,34 @@ export default function Register() {
     setOtpError("");
     setVerifying(true);
 
-    // Final payload, once the OTP has actually been fully entered/verified
-    console.log("Final form data:", formData);
+    const verifyOtp = async (phone, otp) => {
+      try {
+        const payload = {
+          phone: phone,
+          otp: otp,
+          purpose: "signup",
+        };
+        await axios.post("http://localhost:3000/otp/verify", payload);
+        setVerified(true);
 
-    // TODO: replace with the real verify-OTP API call, e.g.
-    // fetch("/api/verify-otp", { method: "POST", body: JSON.stringify(formData) })
+        const payload2 = {
+          role: formData.role,
+          name: formData.name,
+          phone: formData.phone,
+          trade: formData.trade,
+        };
+        await axios.post("http://localhost:3000/api/createuser", payload2);
+        navigate("/auth/login");
+      } catch (err) {
+        console.log(err.message);
+        setVerified(false);
+        setOtpError("Invalid or Expired OTP, Please try again");
+      } finally {
+        setVerifying(false);
+      }
+    };
+
+    verifyOtp(formData.phone.trim(), formData.otp);
   };
 
   return (
@@ -147,6 +189,7 @@ export default function Register() {
                         display: "flex",
                         flexDirection: "column",
                         gap: "20px",
+                        paddingTop: "500px",
                       }}
                     >
                       <AuthIntro
@@ -225,8 +268,13 @@ export default function Register() {
                       )}
 
                       <div>
-                        <PrimaryActionButton onClick={handleContinue}>
-                          Continue — verify your phone
+                        <PrimaryActionButton
+                          onClick={handleContinue}
+                          loading={sendingOtp}
+                        >
+                          {sendingOtp
+                            ? "Sending OTP…"
+                            : "Continue — verify your phone"}
                         </PrimaryActionButton>
                       </div>
                       <div style={{ display: "flex", gap: "20px" }}>
@@ -326,6 +374,7 @@ export default function Register() {
                       </AuthIntro>
 
                       <div>
+                        <OtpToast otp={otp_hash} />
                         <OtpInput
                           length={6}
                           error={!!otpError}
@@ -383,119 +432,126 @@ export default function Register() {
                 </div>
               ) : (
                 <>
-                  <Link to="/">
-                    <Animate
-                      delay={0.05}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <svg
-                        width="22"
-                        height="22"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                  <div style={{ paddingTop: "100px" }}>
+                    <Link to="/">
+                      <Animate
+                        delay={0.05}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          justifyContent: "flex-end",
+                        }}
                       >
-                        <path
-                          d="M19 12H5M5 12L11 6M5 12L11 18"
-                          stroke="#2A2A28"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                      <h4 className="auth-go-back">Back</h4>
-                    </Animate>
-                  </Link>
-                  <div>
-                    <Animate delay={0.16}>
-                      <AuthIntro
-                        eyebrow="Sign in or Join"
-                        description="Recivo serves two sides. Pick one and we’ll tailor what you’re asked to share. You can switch later."
+                        <svg
+                          width="22"
+                          height="22"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M19 12H5M5 12L11 6M5 12L11 18"
+                            stroke="#2A2A28"
+                            stroke-width="1.6"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        <h4 className="auth-go-back">Back</h4>
+                      </Animate>
+                    </Link>
+                    <div>
+                      <Animate delay={0.16}>
+                        <AuthIntro
+                          eyebrow="Sign in or Join"
+                          description="Recivo serves two sides. Pick one and we’ll tailor what you’re asked to share. You can switch later."
+                        >
+                          Are you here to{" "}
+                          <span
+                            style={{ color: "#0f3d2e", fontStyle: "italic" }}
+                          >
+                            do the <br /> work
+                          </span>
+                          , <br />
+                          or to <span style={{ color: "#ea580c" }}>
+                            hire
+                          </span>{" "}
+                          it?
+                        </AuthIntro>
+                      </Animate>
+                      <Animate
+                        stagger
+                        delay={0.3}
+                        step={0.1}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "20px",
+                        }}
                       >
-                        Are you here to{" "}
-                        <span style={{ color: "#0f3d2e", fontStyle: "italic" }}>
-                          do the <br /> work
-                        </span>
-                        , <br />
-                        or to <span style={{ color: "#ea580c" }}>hire</span> it?
-                      </AuthIntro>
-                    </Animate>
-                    <Animate
-                      stagger
-                      delay={0.3}
-                      step={0.1}
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "20px",
-                      }}
-                    >
-                      <Link to="?role=worker">
-                        <RegChoice
-                          icon="../src/assets/workerTools.png"
-                          iconBg="#E2E0D6"
-                          eyebrow="01 — Artisans, technicians, craftspeople"
-                          bigText="I do the work"
-                          smallText="Prove a real trade. Get matched to jobs. Build a portable credential employers can replay before hiring."
-                        />
-                      </Link>
-                      <Link to="?role=employer">
-                        <RegChoice
-                          icon="../src/assets/employer.png"
-                          iconBg="#F2E1D2"
-                          hoverColor="#EA580C"
-                          eyebrow="02 — Brands, SMEs, fleet managers"
-                          bigText="I hire the work"
-                          smallText="Post in plain language. Replay each worker's diagnostic interview. Fund per-job escrow. Release on completion."
-                        />
-                      </Link>
-                    </Animate>
-                    <Animate
-                      delay={0.49}
-                      style={{ paddingTop: "20px", paddingBottom: "20px" }}
-                    >
-                      <div className="register-bottom-row">
-                        <h4 className="already-with-us">
-                          Already with us?
-                          <Link to="/auth/login">
-                            <span
-                              onMouseEnter={() => setHover(true)}
-                              onMouseLeave={() => setHover(false)}
-                              style={{
-                                paddingLeft: "5px",
-                                textDecoration: "underline",
-                                textDecorationColor: "#c89a2a",
-                                color: hover ? "#0f3d2e" : "#14110f",
-                                textDecorationThickness: "2px",
-                                textUnderlineOffset: "4px",
-                                transition: "color 0.3s ease",
-                              }}
-                            >
-                              Sign in
-                            </span>
-                          </Link>
-                        </h4>
-                        <div>
-                          <Link to="/">
-                            <h3
-                              style={{
-                                color: "#14110a",
-                                fontFamily: "Poppins",
-                                fontWeight: "400",
-                                fontSize: "15px",
-                              }}
-                            >
-                              Back to home
-                            </h3>
-                          </Link>
+                        <Link to="?role=worker">
+                          <RegChoice
+                            icon="../src/assets/workerTools.png"
+                            iconBg="#E2E0D6"
+                            eyebrow="01 — Artisans, technicians, craftspeople"
+                            bigText="I do the work"
+                            smallText="Prove a real trade. Get matched to jobs. Build a portable credential employers can replay before hiring."
+                          />
+                        </Link>
+                        <Link to="?role=employer">
+                          <RegChoice
+                            icon="../src/assets/employer.png"
+                            iconBg="#F2E1D2"
+                            hoverColor="#EA580C"
+                            eyebrow="02 — Brands, SMEs, fleet managers"
+                            bigText="I hire the work"
+                            smallText="Post in plain language. Replay each worker's diagnostic interview. Fund per-job escrow. Release on completion."
+                          />
+                        </Link>
+                      </Animate>
+                      <Animate
+                        delay={0.49}
+                        style={{ paddingTop: "20px", paddingBottom: "20px" }}
+                      >
+                        <div className="register-bottom-row">
+                          <h4 className="already-with-us">
+                            Already with us?
+                            <Link to="/auth/login">
+                              <span
+                                onMouseEnter={() => setHover(true)}
+                                onMouseLeave={() => setHover(false)}
+                                style={{
+                                  paddingLeft: "5px",
+                                  textDecoration: "underline",
+                                  textDecorationColor: "#c89a2a",
+                                  color: hover ? "#0f3d2e" : "#14110f",
+                                  textDecorationThickness: "2px",
+                                  textUnderlineOffset: "4px",
+                                  transition: "color 0.3s ease",
+                                }}
+                              >
+                                Sign in
+                              </span>
+                            </Link>
+                          </h4>
+                          <div>
+                            <Link to="/">
+                              <h3
+                                style={{
+                                  color: "#14110a",
+                                  fontFamily: "Poppins",
+                                  fontWeight: "400",
+                                  fontSize: "15px",
+                                }}
+                              >
+                                Back to home
+                              </h3>
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                    </Animate>
+                      </Animate>
+                    </div>
                   </div>
                 </>
               )}
