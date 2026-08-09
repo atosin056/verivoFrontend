@@ -2,6 +2,7 @@ import Sidebar from "../components/Sidebar.jsx";
 import Topbar from "../components/Topbar.jsx";
 import TodayHero from "../components/Todayhero.jsx";
 import IseScoreCard from "../components/Isescorecard.jsx";
+import WalletCard from "../components/Walletcard.jsx";
 import { useNavigate } from "react-router-dom";
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function Dashboard() {
           />
           <div style={{ width: "100%" }}>
             <div style={{ display: "flex", width: "100%", gap: "20px" }}>
-              <div style={{ width: "55%" }}>
+              <div style={{ width: "60%" }}>
                 <IseScoreCard
                   score={0}
                   knowledge={0}
@@ -29,7 +30,19 @@ export default function Dashboard() {
                   footerText="Your Trust score grows on every Squad-confirmed payment. Going off-platform doesn't punish — it just stops rewarding while others compound."
                 />
               </div>
-              <div style={{ background: "blue", width: "45%" }}>T</div>
+              <div style={{ width: "40%" }}>
+                <WalletCard
+                  provider="SQUAD VA"
+                  bank="GTCO"
+                  status="Active"
+                  since="2026-03"
+                  accountNumber="9012345678"
+                  available={0}
+                  inEscrow={0}
+                  thisMonth={0}
+                  onOpenWallet={() => navigate("/wallet")}
+                />
+              </div>
             </div>
           </div>
         </div>

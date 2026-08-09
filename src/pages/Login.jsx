@@ -97,7 +97,7 @@ export default function Login() {
         await axios.post("http://localhost:3000/otp/verify", payload);
         setVerified(true);
         setVerifying(false);
-        navigate("/dashboard");
+        navigate("/app");
       } catch (err) {
         console.log(err.message);
         setVerified(false);

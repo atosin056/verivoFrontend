@@ -214,7 +214,7 @@ export default function IseScoreCard({
         <span
           style={{
             fontFamily: "'Fraunces', serif",
-            fontSize: "64px",
+            fontSize: "112px",
             lineHeight: 1,
           }}
         >
