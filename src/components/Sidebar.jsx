@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Animate from "../components/Animate.jsx";
 import logo from "../assets/logo.png";
 import {
@@ -165,8 +166,15 @@ function ProfileCard({ name, role, score }) {
   );
 }
 
-export default function Sidebar() {
-  const [active, setActive] = useState("today");
+export default function Sidebar({ active, onNavigate }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Falls back to the route if the parent doesn't explicitly pass `active`
+  const path = location.pathname.replace(/^\/app\/?/, ""); // strips leading "/app" or "/app/"
+  const activeKey = active ?? (path || "today");
+  const handleNavigate =
+    onNavigate ?? ((key) => navigate(key === "today" ? "/app" : `/app/${key}`));
 
   return (
     <div
@@ -224,8 +232,8 @@ export default function Sidebar() {
             key={item.key}
             label={item.label}
             icon={item.icon}
-            active={active === item.key}
-            onClick={() => setActive(item.key)}
+            active={activeKey === item.key}
+            onClick={() => handleNavigate(item.key)}
           />
         ))}
       </nav>
@@ -237,9 +245,9 @@ export default function Sidebar() {
         <SidebarLink
           label="Settings"
           icon={Settings}
-          active={false}
+          active={activeKey === "settings"}
           muted
-          onClick={() => {}}
+          onClick={() => handleNavigate("settings")}
         />
         <SidebarLink
           label="Sign out"

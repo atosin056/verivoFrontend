@@ -27,7 +27,7 @@ function Greeting({ name }) {
       style={{
         fontFamily: "'JetBrains Mono', monospace",
         fontSize: "12px",
-        letterSpacing: "0.06em",
+        letterSpacing: "0.18em",
         textTransform: "uppercase",
         color: tokens.inkMuted,
         margin: 0,
@@ -54,7 +54,7 @@ export default function TodayHero({
       <h1
         style={{
           fontFamily: "'Fraunces', serif",
-          fontSize: "38px",
+          fontSize: "48px",
           fontWeight: 400,
           color: tokens.ink,
           margin: "10px 0 12px 0",

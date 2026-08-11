@@ -27,20 +27,21 @@ const StatColumn = ({ label, value, strikethrough }) => (
   <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
     <span
       style={{
-        fontFamily: "'Poppins', sans-serif",
+        fontFamily: "'JetBrains Mono', sans-serif",
         fontSize: 10.5,
-        letterSpacing: "0.08em",
+        letterSpacing: "0.18em",
         textTransform: "uppercase",
         color: tokens.inkMuted,
-        fontWeight: 500,
+        fontWeight: 400,
       }}
     >
       {label}
     </span>
     <span
       style={{
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: 18,
+        fontFamily: "'Fraunces'",
+        wordBreak: "break-all",
+        fontSize: 22,
         fontWeight: 500,
         color: tokens.ink,
         textDecoration: strikethrough ? "line-through" : "none",
@@ -179,9 +180,9 @@ const WalletCard = ({
         >
           <span
             style={{
-              fontFamily: "'JetBrains Mono'",
+              fontFamily: "'JetBrains Mono' ",
               fontSize: 28,
-              fontWeight: 500,
+              fontWeight: 400,
 
               color: tokens.ink,
               letterSpacing: "0.02em",
