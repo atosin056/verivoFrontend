@@ -7,10 +7,10 @@ const tokens = {
 };
 
 export default function SectionHeader({
-  eyebrow = "OFFERS · INBOX",
-  leadText = "Read the offer.",
-  emphasisText = "Counter it.",
-  trailText = "Then accept.",
+  eyebrow = "",
+  leadText = "",
+  emphasisText = "",
+  trailText = "",
   description = "",
 }) {
   return (

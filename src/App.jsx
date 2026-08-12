@@ -5,7 +5,9 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Offers from "./pages/Offers";
+import Jobs from "./pages/Jobs";
 import "./App.css";
+
 export default function App() {
   return (
     <Routes>
@@ -14,6 +16,7 @@ export default function App() {
       <Route path="/auth" element={<Register />} />
       <Route path="/app" element={<Dashboard />} />
       <Route path="/app/offers" element={<Offers />} />
+      <Route path="/app/jobs" element={<Jobs />} />
     </Routes>
   );
 }

@@ -41,6 +41,7 @@ export default function Offers() {
                 description="When an employer picks you, the offer lands here. Chat in your language, push back on the price, and accept when it's right. Escrow provisions the moment you say yes."
               />
             </div>
+            <div>T</div>
           </div>
         </div>
       </div>

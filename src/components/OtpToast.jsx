@@ -58,7 +58,7 @@ const styles = {
     padding: 0,
   },
   digits: {
-    fontFamily: "'Fraunces",
+    fontFamily: "'JetBrains Mono",
     fontSize: "32px",
     lineHeight: 1,
     fontWeight: 500,
