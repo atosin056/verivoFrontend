@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useBreakpoint from "../hooks/useBreakpoint.js";
 
 const tokens = {
   bone: "#F4F1EA",
@@ -65,6 +66,7 @@ export default function JobCard({
 }) {
   const statusStyle = STATUS_STYLES[status] || STATUS_STYLES.pending;
   const [isHovered, setIsHovered] = useState(false);
+  const { isMobile } = useBreakpoint();
 
   return (
     <div
@@ -73,12 +75,13 @@ export default function JobCard({
       onMouseLeave={() => setIsHovered(false)}
       style={{
         display: "flex",
+        flexDirection: isMobile ? "column" : "row",
         alignItems: "stretch",
         justifyContent: "space-between",
         background: tokens.bone,
         border: `1px solid ${isHovered ? statusStyle.bg : `${tokens.inkMuted}33`}`,
         borderRadius: "16px",
-        padding: "24px 28px",
+        padding: isMobile ? "18px 20px" : "24px 28px",
         boxShadow: isHovered
           ? "0 8px 24px rgba(26, 26, 26, 0.10)"
           : "0 1px 2px rgba(26, 26, 26, 0.02)",
@@ -87,7 +90,8 @@ export default function JobCard({
           "transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease",
         fontFamily: fonts.body,
         cursor: onClick ? "pointer" : "default",
-        gap: "24px",
+        gap: isMobile ? "16px" : "24px",
+        boxSizing: "border-box",
       }}
     >
       {/* left content */}
@@ -97,6 +101,7 @@ export default function JobCard({
           flexDirection: "column",
           gap: "14px",
           flex: 1,
+          minWidth: 0,
         }}
       >
         {/* top row: badges + job number */}
@@ -105,9 +110,18 @@ export default function JobCard({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "8px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              flexWrap: "wrap",
+            }}
+          >
             <span
               style={{
                 background: statusStyle.bg,
@@ -154,7 +168,7 @@ export default function JobCard({
         <h3
           style={{
             fontFamily: fonts.display,
-            fontSize: "24px",
+            fontSize: isMobile ? "20px" : "24px",
             fontWeight: 500,
             color: tokens.ink,
             margin: 0,
@@ -174,7 +188,7 @@ export default function JobCard({
               color: tokens.ink,
             }}
           >
-            “{quote}”
+            "{quote}"
           </div>
         )}
 
@@ -185,6 +199,7 @@ export default function JobCard({
             alignItems: "center",
             gap: "18px",
             marginTop: "4px",
+            flexWrap: "wrap",
           }}
         >
           {location && (
@@ -206,24 +221,35 @@ export default function JobCard({
         </div>
       </div>
 
-      {/* divider */}
-      <div style={{ width: "1px", background: `${tokens.inkMuted}33` }} />
+      {/* divider — vertical bar on desktop, horizontal line on mobile */}
+      <div
+        style={
+          isMobile
+            ? {
+                height: "1px",
+                width: "100%",
+                background: `${tokens.inkMuted}33`,
+              }
+            : { width: "1px", background: `${tokens.inkMuted}33` }
+        }
+      />
 
       {/* right content */}
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
-          minWidth: "160px",
+          flexDirection: isMobile ? "row" : "column",
+          alignItems: isMobile ? "center" : "flex-end",
+          justifyContent: isMobile ? "space-between" : "space-between",
+          minWidth: isMobile ? "auto" : "160px",
+          gap: isMobile ? "12px" : 0,
         }}
       >
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-end",
+            alignItems: isMobile ? "flex-start" : "flex-end",
             gap: "4px",
           }}
         >
@@ -241,7 +267,7 @@ export default function JobCard({
           <span
             style={{
               fontFamily: fonts.display,
-              fontSize: "28px",
+              fontSize: isMobile ? "22px" : "28px",
               fontWeight: 500,
               color: tokens.ink,
             }}

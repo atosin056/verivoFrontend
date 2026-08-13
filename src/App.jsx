@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Offers from "./pages/Offers";
 import Jobs from "./pages/Jobs";
+import Wallet from "./pages/Wallet";
+import Profile from "./pages/Profile";
 import "./App.css";
 
 export default function App() {
@@ -17,6 +19,8 @@ export default function App() {
       <Route path="/app" element={<Dashboard />} />
       <Route path="/app/offers" element={<Offers />} />
       <Route path="/app/jobs" element={<Jobs />} />
+      <Route path="/app/wallet" element={<Wallet />} />
+      <Route path="/app/profile" element={<Profile />} />
     </Routes>
   );
 }

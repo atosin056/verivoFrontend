@@ -31,10 +31,11 @@ export default function SectionHeader({
       <h1
         style={{
           fontFamily: "'Fraunces'",
-          fontSize: "clamp(1.6rem,6vw,2.8rem)",
+          fontSize: "clamp(1.6rem,6vw,3.2rem)",
           fontWeight: 400,
           color: tokens.ink,
           lineHeight: 1.15,
+          letterSpacing: "-0.025em",
           margin: 0,
         }}
       >

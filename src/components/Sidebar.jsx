@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Animate from "../components/Animate.jsx";
 import logo from "../assets/logo.png";
+import useBreakpoint from "../hooks/useBreakpoint.js";
 import {
   Home,
   HandCoins,
@@ -12,6 +13,8 @@ import {
   User,
   Settings,
   LogOut,
+  Menu,
+  X,
 } from "lucide-react";
 
 const tokens = {
@@ -43,7 +46,7 @@ function SidebarLink({ label, icon: Icon, active, onClick, muted = false }) {
     alignItems: "center",
     gap: "12px",
     width: "100%",
-    padding: "12px 16px",
+    padding: "11px 16px",
     borderRadius: "14px",
     border: "none",
     background: active
@@ -53,7 +56,7 @@ function SidebarLink({ label, icon: Icon, active, onClick, muted = false }) {
         : "transparent",
     color: active ? tokens.bone : muted ? tokens.inkFaint : tokens.ink,
     fontFamily: "'Poppins', sans-serif",
-    fontSize: "14.5px",
+    fontSize: "14px",
     fontWeight: active ? 500 : 400,
     cursor: "pointer",
     transition: "background-color 150ms ease, color 150ms ease",
@@ -91,7 +94,7 @@ function ProfileCard({ name, role, score }) {
         padding: "12px 14px",
         borderRadius: "18px",
         border: `1px solid ${tokens.boneDark}`,
-        background: "lab(94.6549% .590444 4.9919 / .7)",
+        background: "rgba(255,255,255,0.5)",
       }}
     >
       <div
@@ -166,40 +169,14 @@ function ProfileCard({ name, role, score }) {
   );
 }
 
-export default function Sidebar({ active, onNavigate }) {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Falls back to the route if the parent doesn't explicitly pass `active`
-  const path = location.pathname.replace(/^\/app\/?/, ""); // strips leading "/app" or "/app/"
-  const activeKey = active ?? (path || "today");
-  const handleNavigate =
-    onNavigate ?? ((key) => navigate(key === "today" ? "/app" : `/app/${key}`));
-
+function SidebarContent({ activeKey, handleNavigate }) {
   return (
-    <div
-      style={{
-        width: "23.5%",
-        height: "100%",
-        position: "sticky",
-        left: "0",
-        background: tokens.bone,
-        border: `1px solid lab(5.29734% .960186 1.48356/.08)`,
-        padding: "1.2rem",
-        display: "flex",
-        flexDirection: "column",
-        boxSizing: "border-box",
-      }}
-    >
+    <>
       {/* Logo */}
       <div>
         <Animate
           delay={0.05}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "5px",
-          }}
+          style={{ display: "flex", alignItems: "center", gap: "5px" }}
         >
           <div>
             <img src={logo} className="logo" alt="Verivo logo" />
@@ -257,6 +234,145 @@ export default function Sidebar({ active, onNavigate }) {
           onClick={() => {}}
         />
       </div>
-    </div>
+    </>
+  );
+}
+
+export default function Sidebar({ active, onNavigate }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isTablet } = useBreakpoint();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Falls back to the route if the parent doesn't explicitly pass `active`
+  const path = location.pathname.replace(/^\/app\/?/, ""); // strips leading "/app" or "/app/"
+  const activeKey = active ?? (path || "today");
+  const handleNavigate =
+    onNavigate ??
+    ((key) => {
+      navigate(key === "today" ? "/app" : `/app/${key}`);
+      setDrawerOpen(false); // close the drawer after picking a page on mobile
+    });
+
+  // ---- Desktop / tablet-and-up: same fixed sidebar as before ----
+  if (!isTablet) {
+    return (
+      <div
+        style={{
+          width: "23.5%",
+          minWidth: "240px",
+          height: "100%",
+          position: "sticky",
+          left: "0",
+          background: tokens.bone,
+          border: `1px solid rgba(20,17,15,0.08)`,
+          padding: "1.2rem",
+          display: "flex",
+          flexDirection: "column",
+          boxSizing: "border-box",
+        }}
+      >
+        <SidebarContent activeKey={activeKey} handleNavigate={handleNavigate} />
+      </div>
+    );
+  }
+
+  // ---- Mobile / tablet: collapsed top bar + slide-in drawer ----
+  return (
+    <>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "14px 18px",
+          background: tokens.bone,
+          borderBottom: `1px solid ${tokens.boneDark}`,
+          boxSizing: "border-box",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <img src={logo} className="logo" alt="Verivo logo" />
+          <h4 className="logoText" style={{ color: "#000", margin: 0 }}>
+            Verivo
+          </h4>
+        </div>
+        <button
+          type="button"
+          onClick={() => setDrawerOpen(true)}
+          aria-label="Open menu"
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: tokens.ink,
+            display: "flex",
+            padding: "6px",
+          }}
+        >
+          <Menu size={22} />
+        </button>
+      </div>
+
+      {drawerOpen && (
+        <>
+          {/* backdrop */}
+          <div
+            onClick={() => setDrawerOpen(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(20,17,15,0.4)",
+              zIndex: 40,
+            }}
+          />
+          {/* drawer panel */}
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              width: "min(80vw, 300px)",
+              background: tokens.bone,
+              padding: "1.2rem",
+              display: "flex",
+              flexDirection: "column",
+              boxSizing: "border-box",
+              zIndex: 50,
+              boxShadow: "8px 0 24px rgba(0,0,0,0.15)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginBottom: "8px",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(false)}
+                aria-label="Close menu"
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: tokens.ink,
+                  padding: "6px",
+                }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <SidebarContent
+              activeKey={activeKey}
+              handleNavigate={handleNavigate}
+            />
+          </div>
+        </>
+      )}
+    </>
   );
 }

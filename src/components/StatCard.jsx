@@ -4,6 +4,8 @@ const tokens = {
   border: "#e7e2d3",
   ink: "#1c1c1a",
   inkMuted: "#8c8a80",
+  arrow: "#b0812f",
+  note: "#3a5a78",
 };
 
 export default function StatCard({
@@ -12,6 +14,10 @@ export default function StatCard({
   suffix = "",
   description = "",
   prefix = "",
+  unit = "",
+  note = "",
+  noteColor = tokens.note,
+  arrowColor = tokens.arrow,
 }) {
   return (
     <div
@@ -24,8 +30,11 @@ export default function StatCard({
         display: "flex",
         flexDirection: "column",
         gap: "10px",
-        width: "fit-content",
-        minWidth: "230px",
+        // was: width: "fit-content", minWidth: "230px" — that overflowed
+        // narrower grid cells (2-col tablet, 1-col mobile). Filling the
+        // cell width lets the parent grid control sizing instead.
+        width: "100%",
+        boxSizing: "border-box",
       }}
     >
       <span
@@ -41,19 +50,84 @@ export default function StatCard({
         {label}
       </span>
 
-      <span
+      <div
         style={{
-          fontFamily: "'Fraunces', serif",
-          fontSize: "40px",
-          fontWeight: 400,
-          color: tokens.ink,
-          lineHeight: 1,
+          display: "flex",
+          alignItems: "flex-end",
+          gap: "18px",
+          flexWrap: "wrap",
         }}
       >
-        {prefix}
-        {value}
-        {suffix}
-      </span>
+        {/* value block — stacks value + unit on separate lines when unit is passed */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: unit ? "column" : "row",
+            lineHeight: 1,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Fraunces', serif",
+              fontSize: "clamp(28px, 6vw, 40px)",
+              fontWeight: 400,
+              color: tokens.ink,
+              lineHeight: 1,
+            }}
+          >
+            {prefix}
+            {value}
+            {!unit && suffix}
+          </span>
+          {unit && (
+            <span
+              style={{
+                fontFamily: "'Fraunces', serif",
+                fontSize: "clamp(28px, 6vw, 40px)",
+                fontWeight: 400,
+                color: tokens.ink,
+                lineHeight: 1,
+              }}
+            >
+              {unit}
+            </span>
+          )}
+        </div>
+
+        {/* side note — arrow + short label, e.g. "→ Squad Transfer API" */}
+        {note && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "6px",
+              paddingBottom: "6px",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "12px",
+                color: arrowColor,
+              }}
+            >
+              →
+            </span>
+            <span
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "12px",
+                fontWeight: 400,
+                color: noteColor,
+                lineHeight: 1.55,
+                maxWidth: "90px",
+              }}
+            >
+              {note}
+            </span>
+          </div>
+        )}
+      </div>
 
       {description && (
         <span
@@ -71,12 +145,3 @@ export default function StatCard({
     </div>
   );
 }
-
-// Usage:
-// <StatCard label="COMPLETED JOBS" value={0} />
-// <StatCard
-//   label="REPEAT CUSTOMERS"
-//   value={0}
-//   suffix="%"
-//   description="Strongest predictor of skill."
-// />
