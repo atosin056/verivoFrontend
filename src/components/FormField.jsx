@@ -38,7 +38,7 @@ export default function FormField({
       <label
         style={{
           display: "block",
-          fontFamily: "'Poppins', sans-serif",
+          fontFamily: "'Instrument Sans', sans-serif",
           fontSize: "14.5px",
           fontWeight: 500,
           color: "#14110f",
@@ -110,7 +110,7 @@ export default function FormField({
             color: "#14110f",
             fontFamily: isTel
               ? "'JetBrains Mono', monospace"
-              : "'Poppins', sans-serif",
+              : "'Instrument Sans', sans-serif",
             fontSize: isTel ? "14.5px" : "15px",
             letterSpacing: isTel ? "0.05em" : "normal",
           }}
@@ -121,7 +121,7 @@ export default function FormField({
       {underText && (
         <p
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "13px",
             color: "#6b6055",
             margin: "8px 2px 0",

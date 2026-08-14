@@ -77,7 +77,7 @@ function MetricRing({ value, max = 100, label, sublabel, size = 76 }) {
         </div>
         <div
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "13px",
             color: tokens.bone,
             lineHeight: 1.3,
@@ -191,7 +191,7 @@ export default function IseScoreCard({
             background: "none",
             border: "none",
             color: tokens.mutedLight,
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "13px",
             cursor: "pointer",
           }}
@@ -222,7 +222,7 @@ export default function IseScoreCard({
         </span>
         <span
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "18px",
             color: tokens.mutedLight,
             marginBottom: "8px",
@@ -287,7 +287,7 @@ export default function IseScoreCard({
           style={{
             position: "relative",
             zIndex: 1,
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "13px",
             color: tokens.mutedLight,
             lineHeight: 1.6,

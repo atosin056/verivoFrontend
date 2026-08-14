@@ -37,7 +37,7 @@ const styles = {
   labelGroup: { display: "flex", alignItems: "center", gap: "6px" },
   sparkleIcon: { color: "#D9A93B" },
   label: {
-    fontFamily: "Poppins, sans-serif",
+    fontFamily: "Instrument Sans, sans-serif",
     fontSize: "11px",
     fontWeight: 600,
     letterSpacing: "0.14em",
@@ -67,7 +67,7 @@ const styles = {
     fontVariantNumeric: "tabular-nums",
   },
   timer: {
-    fontFamily: "Poppins, sans-serif",
+    fontFamily: "Instrument Sans, sans-serif",
     marginTop: "8px",
     fontSize: "12px",
     color: "#a8a294",

@@ -41,7 +41,7 @@ function SearchBar({
           border: "none",
           outline: "none",
           background: "#0000",
-          fontFamily: "'Poppins', sans-serif",
+          fontFamily: "'Instrument Sans', sans-serif",
           fontSize: "13.5px",
           color: tokens.ink,
         }}

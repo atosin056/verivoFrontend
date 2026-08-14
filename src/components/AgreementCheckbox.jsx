@@ -88,7 +88,7 @@ export default function AgreementCheckbox({
       </span>
       <span
         style={{
-          fontFamily: "'Poppins', sans-serif",
+          fontFamily: "'Instrument Sans', sans-serif",
           fontSize: "14px",
           lineHeight: 1.55,
           color: "#3a352d",

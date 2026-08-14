@@ -159,7 +159,7 @@ export default function Register() {
               </h2>
               <figcaption class="figcaption">
                 <span class="line"></span>
-                <span style={{ fontFamily: "Poppins" }}>
+                <span style={{ fontFamily: "Instrument Sans" }}>
                   <strong>Emeka</strong> · Phone repair · Computer Village
                 </span>
               </figcaption>
@@ -189,7 +189,6 @@ export default function Register() {
                         display: "flex",
                         flexDirection: "column",
                         gap: "20px",
-                        paddingTop: "500px",
                       }}
                     >
                       <AuthIntro
@@ -258,7 +257,7 @@ export default function Register() {
                         <p
                           style={{
                             color: "#c0392b",
-                            fontFamily: "Poppins",
+                            fontFamily: "Instrument Sans",
                             fontSize: "13px",
                             margin: 0,
                           }}
@@ -387,7 +386,7 @@ export default function Register() {
                         <p
                           style={{
                             color: "#c0392b",
-                            fontFamily: "Poppins",
+                            fontFamily: "Instrument Sans",
                             fontSize: "13px",
                             margin: 0,
                           }}
@@ -540,7 +539,7 @@ export default function Register() {
                               <h3
                                 style={{
                                   color: "#14110a",
-                                  fontFamily: "Poppins",
+                                  fontFamily: "Instrument Sans",
                                   fontWeight: "400",
                                   fontSize: "15px",
                                 }}

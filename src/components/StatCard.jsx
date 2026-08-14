@@ -132,7 +132,7 @@ export default function StatCard({
       {description && (
         <span
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "13px",
             fontWeight: 400,
             color: tokens.inkMuted,

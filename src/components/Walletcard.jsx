@@ -129,18 +129,19 @@ const WalletCard = ({
             alignItems: "center",
             gap: 6,
             padding: "6px 12px",
-            borderRadius: 999,
-            border: `1px solid ${tokens.emerald}33`,
-            background: `${tokens.emerald}0d`,
+            borderRadius: 4,
+            border: `1px solid ${tokens.emerald}`,
+            background: "#0f3d2e08",
           }}
         >
           <Check size={13} color={tokens.emerald} strokeWidth={2.5} />
           <span
             style={{
-              fontSize: 12.5,
+              fontSize: "9.5px",
               fontWeight: 600,
-              letterSpacing: "0.02em",
+              letterSpacing: "0.14em",
               color: tokens.emerald,
+              fontFamily: "JetBrains Mono",
             }}
           >
             {provider} · {bank}
@@ -148,8 +149,9 @@ const WalletCard = ({
         </div>
         <span
           style={{
-            fontSize: 12.5,
+            fontSize: 10,
             color: tokens.inkMuted,
+            fontFamily: "JetBrains mono",
           }}
         >
           {status} · since {since}
@@ -160,10 +162,11 @@ const WalletCard = ({
       <div style={{ marginBottom: 18, position: "relative" }}>
         <div
           style={{
-            fontSize: 10.5,
-            letterSpacing: "0.08em",
+            fontSize: "9.5px",
+            letterSpacing: "0.22em",
             textTransform: "uppercase",
             color: tokens.inkMuted,
+            fontFamily: "JetBrains Mono",
             fontWeight: 500,
             marginBottom: 8,
           }}

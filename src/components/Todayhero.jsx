@@ -4,7 +4,7 @@ const tokens = {
   emerald: "#0F3D2E",
   bone: "#EFEBE0",
   ink: "#1C1C1C",
-  inkMuted: "#6B6B63",
+  inkMuted: "#2a2521",
   gold: "#B08D57",
 };
 
@@ -26,7 +26,7 @@ function Greeting({ name }) {
     <p
       style={{
         fontFamily: "'JetBrains Mono', monospace",
-        fontSize: "12px",
+        fontSize: "10.5px",
         letterSpacing: "0.18em",
         textTransform: "uppercase",
         color: tokens.inkMuted,
@@ -54,10 +54,11 @@ export default function TodayHero({
       <h1
         style={{
           fontFamily: "'Fraunces', serif",
-          fontSize: "48px",
+          fontSize: "clamp(1.6rem, 6vw, 3rem)",
           fontWeight: 400,
           color: tokens.ink,
           margin: "10px 0 12px 0",
+          letterSpacing: "-0.025em",
           lineHeight: 1.1,
         }}
       >
@@ -69,8 +70,8 @@ export default function TodayHero({
 
       <p
         style={{
-          fontFamily: "'Poppins', sans-serif",
-          fontSize: "14px",
+          fontFamily: "'Instrument Sans', sans-serif",
+          fontSize: "13.5px",
           color: tokens.inkMuted,
           margin: "0 0 20px 0",
         }}
@@ -91,9 +92,9 @@ export default function TodayHero({
           border: "none",
           background: tokens.emerald,
           color: tokens.bone,
-          fontFamily: "'Poppins', sans-serif",
+          fontFamily: "'Instrument Sans', sans-serif",
           fontSize: "14px",
-          fontWeight: 500,
+          fontWeight: 400,
           cursor: "pointer",
         }}
       >

@@ -18,7 +18,7 @@ export default function Dashboard() {
         jobsCompleted={0}
         emphasis="No new matches yet"
         rest="match you today."
-        onCtaClick={() => navigate("/jobs")}
+        onCtaClick={() => navigate("/app/jobs")}
       />
 
       <div
@@ -38,7 +38,7 @@ export default function Dashboard() {
             gap: "20px",
           }}
         >
-          <div style={{ width: isTablet ? "100%" : "60%" }}>
+          <div style={{ width: isTablet ? "100%" : "59%" }}>
             <IseScoreCard
               score={0}
               knowledge={0}
@@ -46,7 +46,7 @@ export default function Dashboard() {
               footerText="Your Trust score grows on every Squad-confirmed payment. Going off-platform doesn't punish — it just stops rewarding while others compound."
             />
           </div>
-          <div style={{ width: isTablet ? "100%" : "40%" }}>
+          <div style={{ width: isTablet ? "100%" : "41%" }}>
             <WalletCard
               provider="PAYSTACK VA"
               bank="GTCO"

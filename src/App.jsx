@@ -8,7 +8,9 @@ import Offers from "./pages/Offers";
 import Jobs from "./pages/Jobs";
 import Wallet from "./pages/Wallet";
 import Profile from "./pages/Profile";
+import Disputes from "./pages/Disputes";
 import "./App.css";
+import Diagnostic from "./pages/Diagnostic";
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
       <Route path="/app/jobs" element={<Jobs />} />
       <Route path="/app/wallet" element={<Wallet />} />
       <Route path="/app/profile" element={<Profile />} />
+      <Route path="/app/disputes" element={<Disputes />} />
+      <Route path="/app/diagnostic" element={<Diagnostic />} />
     </Routes>
   );
 }

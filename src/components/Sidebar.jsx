@@ -55,7 +55,7 @@ function SidebarLink({ label, icon: Icon, active, onClick, muted = false }) {
         ? tokens.boneDark
         : "transparent",
     color: active ? tokens.bone : muted ? tokens.inkFaint : tokens.ink,
-    fontFamily: "'Poppins', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: "14px",
     fontWeight: active ? 500 : 400,
     cursor: "pointer",
@@ -119,7 +119,7 @@ function ProfileCard({ name, role, score }) {
       <div style={{ flex: 1, minWidth: 0 }}>
         <div
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "13.5px",
             fontWeight: 500,
             color: tokens.ink,
@@ -132,7 +132,7 @@ function ProfileCard({ name, role, score }) {
         </div>
         <div
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "12px",
             color: tokens.inkMuted,
             marginTop: "1px",
@@ -156,7 +156,7 @@ function ProfileCard({ name, role, score }) {
         </div>
         <div
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "10px",
             color: tokens.inkMuted,
             marginTop: "2px",

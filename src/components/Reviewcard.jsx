@@ -40,7 +40,7 @@ export default function ReviewCard({
       >
         <span
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "13px",
             fontWeight: 600,
             color: tokens.ink,
@@ -57,7 +57,7 @@ export default function ReviewCard({
         {timeAgo && (
           <span
             style={{
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "'Instrument Sans', sans-serif",
               fontSize: "12.5px",
               color: tokens.inkMuted,
             }}
@@ -83,7 +83,7 @@ export default function ReviewCard({
       {quote && (
         <p
           style={{
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontStyle: "italic",
             fontSize: "14px",
             lineHeight: 1.6,
@@ -113,7 +113,7 @@ export default function ReviewCard({
                 border: `1px solid ${tokens.border}`,
                 borderRadius: "999px",
                 padding: "6px 14px",
-                fontFamily: "'Poppins', sans-serif",
+                fontFamily: "'Instrument Sans', sans-serif",
                 fontSize: "12.5px",
                 color: tokens.ink,
               }}

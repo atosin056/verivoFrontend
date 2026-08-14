@@ -61,7 +61,7 @@ export default function ToolsCard({ tools = [], note, onEdit }) {
             border: "none",
             cursor: "pointer",
             color: editHover ? tokens.ink : tokens.inkMuted,
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: "13.5px",
             transition: "color 0.2s ease",
           }}
@@ -90,7 +90,7 @@ export default function ToolsCard({ tools = [], note, onEdit }) {
                 display: "flex",
                 alignItems: "baseline",
                 gap: "10px",
-                fontFamily: "'Poppins', sans-serif",
+                fontFamily: "'Instrument Sans', sans-serif",
                 fontSize: "14.5px",
                 color: tokens.ink,
               }}
@@ -108,7 +108,7 @@ export default function ToolsCard({ tools = [], note, onEdit }) {
           <div style={{ height: "1px", background: tokens.border }} />
           <p
             style={{
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "'Instrument Sans', sans-serif",
               fontSize: "12px",
               fontStyle: "italic",
               color: "#6b6055",

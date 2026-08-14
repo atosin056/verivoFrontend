@@ -2,7 +2,7 @@ const tokens = {
   emerald: "#0F3D2E",
   bone: "#EFEBE0",
   ink: "#1C1C1C",
-  inkMuted: "#6B6B63",
+  inkMuted: "#2a2521",
   gold: "#B08D57",
 };
 
@@ -31,7 +31,7 @@ export default function SectionHeader({
       <h1
         style={{
           fontFamily: "'Fraunces'",
-          fontSize: "clamp(1.6rem,6vw,3.2rem)",
+          fontSize: "clamp(1.6rem, 6vw, 3rem)",
           fontWeight: 400,
           color: tokens.ink,
           lineHeight: 1.15,
@@ -49,10 +49,10 @@ export default function SectionHeader({
       {description && (
         <p
           style={{
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: "14.5px",
+            fontFamily: "'Instrument Sans', sans-serif",
+            fontSize: "13.5px",
             fontWeight: 400,
-            color: tokens.inkMuted,
+            color: "#2a2521",
             lineHeight: 1.6,
             margin: 0,
             maxWidth: "620px",
