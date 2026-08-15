@@ -489,6 +489,3 @@ Hire with confidence.
   <strong>Verivo — Trust, verified.</strong>
 </p>
 
-<p align="center">
-  Built for <strong>GTCO Squad Hackathon 3.0</strong>
-</p>
