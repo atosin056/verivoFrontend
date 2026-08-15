@@ -107,14 +107,19 @@ export default function Register() {
         await axios.post("http://localhost:3000/otp/verify", payload);
         setVerified(true);
 
-        const payload2 = {
-          role: formData.role,
-          name: formData.name,
-          phone: formData.phone,
-          trade: formData.trade,
-        };
-        await axios.post("http://localhost:3000/api/createuser", payload2);
-        navigate("/auth/login");
+        sessionStorage.setItem(
+          "VerivoApplySeed",
+          JSON.stringify({
+            fullName: formData.name,
+            phone: formData.phone,
+            trade: formData.trade,
+            role: formData.role,
+          }),
+        );
+
+        navigate("/apply");
+
+        //setRegStep(1);
       } catch (err) {
         console.log(err.message);
         setVerified(false);
@@ -192,7 +197,7 @@ export default function Register() {
                       }}
                     >
                       <AuthIntro
-                        eyebrow="Create your Recivo"
+                        eyebrow="Create your Verivo"
                         description="First, your phone. Then we open a Paystack Virtual Account in the background while you do the real work — the diagnostic interview."
                       >
                         <div>
@@ -248,7 +253,7 @@ export default function Register() {
                           onChange={(val) => updateField("agreed", val)}
                           color="#0f3d2e"
                         >
-                          I agree to the Recivo Terms and Privacy Notice .
+                          I agree to the Verivo Terms and Privacy Notice .
                           NDPR-compliant; voice recordings deletable on request.
                         </AgreementCheckbox>
                       </div>
@@ -464,7 +469,7 @@ export default function Register() {
                       <Animate delay={0.16}>
                         <AuthIntro
                           eyebrow="Sign in or Join"
-                          description="Recivo serves two sides. Pick one and we’ll tailor what you’re asked to share. You can switch later."
+                          description="Verivo serves two sides. Pick one and we’ll tailor what you’re asked to share. You can switch later."
                         >
                           Are you here to{" "}
                           <span

@@ -11,6 +11,8 @@ import Profile from "./pages/Profile";
 import Disputes from "./pages/Disputes";
 import "./App.css";
 import Diagnostic from "./pages/Diagnostic";
+import Apply from "./pages/Apply";
+import { Apple } from "lucide-react";
 
 export default function App() {
   return (
@@ -25,6 +27,7 @@ export default function App() {
       <Route path="/app/profile" element={<Profile />} />
       <Route path="/app/disputes" element={<Disputes />} />
       <Route path="/app/diagnostic" element={<Diagnostic />} />
+      <Route path="/apply" element={<Apply />} />
     </Routes>
   );
 }
